@@ -1,0 +1,30 @@
+import wixSecretsBackend from 'wix-secrets-backend';
+import sendGridMail from '@sendgrid/mail';
+import wixData from 'wix-data'
+
+export async function sendEmail(recipient, sender = "jerryxing@visualzero.com", subject =  "Happy Birthday!", body = "Happy Birthday!") {
+  const secret = await wixSecretsBackend.getSecret("SENDGRID_API_KEY");
+  sendGridMail.setApiKey(secret);
+  let date = new Date()
+  let dates = date.toLocaleDateString()
+  let datess = dates.slice(0, 4)
+  wixData.query("Contacts")
+    .find()
+    .then((result) => {
+      let firstName = result.items[0].birthday
+      let firstNames = firstName.slice(1, 5)
+      let email = result.items[0].email
+      const message = {
+        "to": email,
+        "from": sender,
+        "subject": subject,
+        "text": body
+      }
+      for (let i = 0; i < result.items.length; i++) {
+        if (result.items[i].birthday.slice(1, 5) === datess || result.items[i].birthday.slice(0, 4) === dates) {
+          sendGridMail.send(message)
+          console.log("Email Sent")
+        }
+    }
+},
+    )}
