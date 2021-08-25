@@ -1,0 +1,15 @@
+import wixWindow from 'wix-window';
+
+let receivedData = wixWindow.lightbox.getContext()
+
+$w.onReady(function () {
+	let email = receivedData.email;
+	let status = receivedData.status;
+	if (status === "success") {
+		$w('#status').text = "Email Sent!";
+		$w('#statusMessage').text = "Your email message was sent to: " + email;
+	} else {
+		$w('#status').text = "Failed";
+		$w('#statusMessage').text = "Your email message to " + " was not sent.";
+	}
+});
