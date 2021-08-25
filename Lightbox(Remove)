@@ -1,0 +1,11 @@
+import wixWindow from 'wix-window'
+import wixData from 'wix-data'
+import wixLocation from 'wix-location'
+$w.onReady(function () {
+	let receivedData = wixWindow.lightbox.getContext()
+	let itemToRemove = receivedData.item._id
+	$w("#confirm").onClick((event) => {
+		wixData.remove("Contacts", itemToRemove)
+		console.log("Item Deleted")
+	})
+});
