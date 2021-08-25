@@ -1,0 +1,15 @@
+import wixSecretsBackend from 'wix-secrets-backend';
+import sendGridMail from '@sendgrid/mail';
+import wixData from 'wix-data'
+
+export async function sendEmail(recipient, sender, subject, body) {
+  const secret = await wixSecretsBackend.getSecret("SENDGRID_API_KEY");
+  sendGridMail.setApiKey(secret);
+  const message = {
+        "to": recipient,
+        "from": sender,
+        "subject": subject,
+        "text": body
+      }
+	sendGridMail.send(message)
+}
