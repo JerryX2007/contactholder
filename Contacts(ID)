@@ -1,0 +1,37 @@
+import { sendEmail } from 'backend/sendEmail';
+import wixWindow from 'wix-window'
+import wixData from 'wix-data'
+$w.onReady(function () {
+	$w("#dynamicDataset").onReady(() => {
+		$w("#removeContact").onClick( (event) => {
+			let dataObj = {
+			item: $w("#dynamicDataset").getCurrentItem()
+		}
+		wixWindow.openLightbox("Remove", dataObj)
+	})
+})
+})
+
+export function sendEmailButton_click(event, $w) {
+	sendEmail(
+			$w("#contactEmail").text,
+			"jerryxing@visualzero.com",
+			$w("#subject").value,
+			$w("#emailContent").value)
+		.then((res) => {
+			let obj = {
+				status: "success",
+				email: $w("#contactEmail").text
+			}
+			wixWindow.openLightbox("Message", obj)
+			$w("#subject").value = ""
+			$w("#emailContent").value = ""
+		})
+		.catch((error) => {
+			let obj = {
+				status: "fail",
+				email: $w('#contactEmail').text
+			}
+			wixWindow.openLightbox("Message", obj) 
+		})
+}
